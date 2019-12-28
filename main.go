@@ -6,37 +6,26 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 	"log"
+	"net/http"
+	"time"
+	"vonhng/doja/routers"
 )
 
-type Login struct {
-	User     string `json:"user"`
-	Password string `json:"password"`
-}
-
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	session, err := mgo.Dial("localhost:27017")
-	if err != nil {
-		panic(err)
+	gin.SetMode(gin.DebugMode)
+	routersInit := routers.InitRouter()
+	endPoint := fmt.Sprintf(":%d", 8000)
+	maxHeaderBytes := 1 << 20
+
+	server := &http.Server{
+		Addr:           endPoint,
+		Handler:        routersInit,
+		ReadTimeout:    2 * time.Second,
+		WriteTimeout:   3 * time.Second,
+		MaxHeaderBytes: maxHeaderBytes,
 	}
-	defer session.Close()
-
-	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("auth").C("test")
-
-	result := Login{}
-	err = c.Find(bson.M{"user": "fqy"}).One(&result)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(result.Password)
+	log.Printf("[info] start http server listening %s", endPoint)
+	//routersInit.Run(":8000")
+	server.ListenAndServe()
 }
