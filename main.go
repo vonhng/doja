@@ -9,13 +9,18 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"vonhng/doja/pkg/config"
 	"vonhng/doja/routers"
 )
+
+func init() {
+	config.ParseConfig()
+}
 
 func main() {
 	gin.SetMode(gin.DebugMode)
 	routersInit := routers.InitRouter()
-	endPoint := fmt.Sprintf(":%d", 8000)
+	endPoint := fmt.Sprintf("%s:%s", config.Setting.Web.Address, config.Setting.Web.Port)
 	maxHeaderBytes := 1 << 20
 
 	server := &http.Server{
@@ -27,5 +32,5 @@ func main() {
 	}
 	log.Printf("[info] start http server listening %s", endPoint)
 	//routersInit.Run(":8000")
-	server.ListenAndServe()
+	_ = server.ListenAndServe()
 }
