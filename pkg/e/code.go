@@ -1,6 +1,6 @@
 // username: vonhng
 // create_time: 2019/12/28 - 21:06
-// mail: qianyong.feng@woqutech.com
+// mail: vonhng.feng@gmail.com
 package e
 
 const (

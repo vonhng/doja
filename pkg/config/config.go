@@ -1,6 +1,6 @@
 // username: vonhng
 // create_time: 2019/12/29 - 22:21
-// mail: qianyong.feng@woqutech.com
+// mail: vonhng.feng@gmail.com
 package config
 
 import (
