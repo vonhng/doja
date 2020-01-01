@@ -5,9 +5,10 @@ package models
 
 import (
 	"fmt"
-	"github.com/grafana/grafana/pkg/infra/log"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 	"vonhng/doja/pkg/config"
+	"vonhng/doja/pkg/logging"
 )
 
 type DBAuth struct {
@@ -24,15 +25,15 @@ func (c *DBAuth) Connect() {
 		config.Setting.DB.DBName)
 	session, err := mgo.Dial(ConnectionUrl)
 	if err != nil {
-		log.Fatal(err)
+		logging.Error(err)
 	}
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
-	c := session.DB(config.Setting.DB.DBName).C("test")
+	query := session.DB(config.Setting.DB.DBName).C("test")
 	OneAuth := &DBAuth{}
-	err = c.Find(bson.M{"username": "fqy"}).One(OneAuth)
+	err = query.Find(bson.M{"username": "fqy"}).One(OneAuth)
 	if err != nil {
-		log.Fatal(err)
+		logging.Error(err)
 	}
-	log.Info(OneAuth.Password)
+	logging.Info(OneAuth.Password)
 }

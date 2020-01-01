@@ -10,8 +10,9 @@ import (
 )
 
 type Config struct {
-	DB  MongoDB    `yaml:"mongodb"`
-	Web WebService `yaml:"web"`
+	DB      MongoDB    `yaml:"mongodb"`
+	Web     WebService `yaml:"web"`
+	Logging Log        `yaml:"logging"`
 }
 
 type MongoDB struct {
@@ -25,6 +26,10 @@ type MongoDB struct {
 type WebService struct {
 	Address string `yaml:"address"`
 	Port    string `yaml:"port"`
+}
+
+type Log struct {
+	LogPath string `yaml:"log_path"`
 }
 
 var Setting = &Config{}

@@ -6,15 +6,16 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"time"
 	"vonhng/doja/pkg/config"
+	"vonhng/doja/pkg/logging"
 	"vonhng/doja/routers"
 )
 
 func init() {
 	config.ParseConfig()
+	logging.SetUpLog()
 }
 
 func main() {
@@ -30,7 +31,7 @@ func main() {
 		WriteTimeout:   3 * time.Second,
 		MaxHeaderBytes: maxHeaderBytes,
 	}
-	log.Printf("[info] start http server listening %s", endPoint)
+	logging.Debug(fmt.Sprintf("start http server listening %s", endPoint))
 	//routersInit.Run(":8000")
 	_ = server.ListenAndServe()
 }
