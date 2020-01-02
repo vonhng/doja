@@ -20,7 +20,7 @@ type MongoDB struct {
 	Port     string `json:"port";yaml:"port"`
 	Username string `json:"username";yaml:"username"`
 	Password string `json:"password";yaml:"password"`
-	DBName   string `json:"db_name";yaml:"db_name"`
+	DBName   string `yaml:"db_name"`
 }
 
 type WebService struct {

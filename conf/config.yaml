@@ -3,7 +3,7 @@ mongodb:
   port: 27017
   username: fqy
   password: 123456
-  db_name: test
+  db_name: auth
 
 web:
   address: 127.0.0.1

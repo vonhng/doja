@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
+	"vonhng/doja/models"
 	"vonhng/doja/pkg/config"
 	"vonhng/doja/pkg/logging"
 	"vonhng/doja/routers"
@@ -33,5 +34,9 @@ func main() {
 	}
 	logging.Debug(fmt.Sprintf("start http server listening %s", endPoint))
 	//routersInit.Run(":8000")
+
+	mgoClient := models.Connect()
+	value := models.Query(mgoClient, "fqy")
+	fmt.Println(value)
 	_ = server.ListenAndServe()
 }
