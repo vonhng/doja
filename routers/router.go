@@ -21,5 +21,6 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 
 	r.GET("/login", api.Login)
+	r.GET("/query", api.DbMgr)
 	return r
 }

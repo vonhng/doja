@@ -8,6 +8,7 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 	"log"
 	"net/http"
+	"vonhng/doja/models"
 	"vonhng/doja/pkg/app"
 	"vonhng/doja/pkg/e"
 )
@@ -18,10 +19,10 @@ type Auth struct {
 }
 
 func (auth *Auth) check() bool {
-	log.Printf("%s ---- %s", auth.Username, auth.Password)
-	return auth.Username == "fqy" && auth.Password == "123456"
-
+	password := models.Query(auth.Username)
+	return password == auth.Password
 }
+
 func Login(c *gin.Context) {
 	g := app.Gin{GinContext: c}
 	valid := validator.New()

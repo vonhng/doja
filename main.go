@@ -17,6 +17,10 @@ import (
 func init() {
 	config.ParseConfig()
 	logging.SetUpLog()
+	err := models.Connect()
+	if err != nil {
+		logging.Fatal("connect mongodb failed")
+	}
 }
 
 func main() {
@@ -34,9 +38,5 @@ func main() {
 	}
 	logging.Debug(fmt.Sprintf("start http server listening %s", endPoint))
 	//routersInit.Run(":8000")
-
-	mgoClient := models.Connect()
-	value := models.Query(mgoClient, "fqy")
-	fmt.Println(value)
 	_ = server.ListenAndServe()
 }
