@@ -19,7 +19,7 @@ type Auth struct {
 }
 
 func (auth *Auth) check() bool {
-	password := models.Query(auth.Username)
+	password := models.QueryOne(auth.Username)
 	return password == auth.Password
 }
 

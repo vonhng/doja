@@ -21,6 +21,9 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 
 	r.GET("/login", api.Login)
-	r.GET("/query", api.DbMgr)
+	r.GET("/query", api.DBQuery)
+	r.POST("/update", api.DBUpdate)
+	r.POST("/insert", api.DBInsert)
+	r.POST("/delete", api.DBDelete)
 	return r
 }

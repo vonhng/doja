@@ -24,6 +24,7 @@ func init() {
 }
 
 func main() {
+	defer models.Disconnect()
 	gin.SetMode(gin.DebugMode)
 	routersInit := routers.InitRouter()
 	endPoint := fmt.Sprintf("%s:%s", config.Setting.Web.Address, config.Setting.Web.Port)

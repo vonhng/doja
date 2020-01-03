@@ -20,8 +20,9 @@ type DBAuth struct {
 }
 
 var (
-	MgoClient *mongo.Client
-	err       error
+	MgoClient  *mongo.Client
+	Collection *mongo.Collection
+	err        error
 )
 
 func Connect() (err error) {
@@ -38,6 +39,7 @@ func Connect() (err error) {
 
 	// Connect to MongoDB
 	MgoClient, err = mongo.Connect(context.TODO(), clientOptions)
+
 	if err != nil {
 		logging.Error(err)
 	}
@@ -46,6 +48,7 @@ func Connect() (err error) {
 	if err != nil {
 		logging.Error(err)
 	}
+	Collection = MgoClient.Database(config.Setting.DB.DBName).Collection("login")
 	fmt.Println("Connected to MongoDB!")
 	return err
 }
@@ -59,20 +62,73 @@ func Ping() error {
 	return err
 }
 
-func Query(key string) interface{} {
+func InsertOne(key, value string) error {
 	err = Ping()
 	if err != nil {
-		logging.Fatal(err)
+		logging.Error(err)
+		return err
 	}
-	collection := MgoClient.Database(config.Setting.DB.DBName).Collection("login")
-	OneAuth := &DBAuth{}
-	err := collection.FindOne(context.TODO(), bson.D{{"username", key}}).Decode(&OneAuth)
+	res, err := Collection.InsertOne(context.Background(), bson.M{"username": key, "password": value})
 	if err != nil {
-		logging.Fatal(err)
+		logging.Error(err)
+	}
+	logging.Info(res.InsertedID)
+	return err
+}
+
+func QueryOne(value string) interface{} {
+	err = Ping()
+	if err != nil {
+		logging.Error(err)
+		return nil
+	}
+	OneAuth := &DBAuth{}
+	err := Collection.FindOne(context.TODO(), bson.D{{"username", value}}).Decode(&OneAuth)
+	if err != nil {
+		logging.Error(err)
 		return nil
 	}
 	logging.Info(*OneAuth)
 	return OneAuth.Password
+}
+
+func UpdateOne(value string) error {
+	err = Ping()
+	if err != nil {
+		logging.Error(err)
+		return err
+	}
+	filter := bson.D{{"username", "fqy"}}
+	update := bson.D{{"$set", bson.D{{"password", value}}}}
+	updateResult, err := Collection.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		logging.Error(err)
+	}
+	logging.Info("Matched %v documents and updated %v documents.\n", updateResult.MatchedCount, updateResult.ModifiedCount)
+	return err
+}
+
+func DeleteOne(key, value string) error {
+	err = Ping()
+	if err != nil {
+		logging.Error(err)
+		return err
+	}
+	// find and delete the document for which the _id field matches id
+	// specify the Projection option to only include the name and age fields in the returned document
+	opts := options.FindOneAndDelete().SetProjection(bson.D{{"username", key}})
+	var deletedDocument bson.M
+	err := Collection.FindOneAndDelete(context.TODO(), bson.D{{"password", value}}, opts).Decode(&deletedDocument)
+
+	if err != nil {
+		// ErrNoDocuments means that the filter did not match any documents in the collection
+		if err == mongo.ErrNoDocuments {
+			return nil
+		}
+		logging.Error(err)
+	}
+	fmt.Printf(" documents was deleted")
+	return err
 }
 
 func Disconnect() {
