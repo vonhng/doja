@@ -4,13 +4,13 @@
 package logging
 
 import (
+	"doja/pkg/config"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"runtime"
 	"time"
-	"vonhng/doja/pkg/config"
 )
 
 type Level int

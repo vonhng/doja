@@ -4,13 +4,13 @@
 package api
 
 import (
+	"doja/models"
+	"doja/pkg/app"
+	"doja/pkg/e"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/go-playground/validator.v9"
 	"log"
 	"net/http"
-	"vonhng/doja/models"
-	"vonhng/doja/pkg/app"
-	"vonhng/doja/pkg/e"
 )
 
 type Auth struct {

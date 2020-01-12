@@ -4,14 +4,14 @@
 package main
 
 import (
+	"doja/models"
+	"doja/pkg/config"
+	"doja/pkg/logging"
+	"doja/routers"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
-	"vonhng/doja/models"
-	"vonhng/doja/pkg/config"
-	"vonhng/doja/pkg/logging"
-	"vonhng/doja/routers"
 )
 
 func init() {

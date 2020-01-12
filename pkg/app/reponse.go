@@ -4,8 +4,8 @@
 package app
 
 import (
+	"doja/pkg/e"
 	"github.com/gin-gonic/gin"
-	"vonhng/doja/pkg/e"
 )
 
 type Gin struct {

@@ -4,8 +4,8 @@
 package routers
 
 import (
+	"doja/routers/api"
 	"github.com/gin-gonic/gin"
-	"vonhng/doja/routers/api"
 )
 
 func InitRouter() *gin.Engine {
